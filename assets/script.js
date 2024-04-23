@@ -3,8 +3,10 @@ const timeValue = document.getElementById("time");
 const startButton = document.getElementById("start");
 const stopButton = document.getElementById("stop");
 const gameContainer = document.querySelector(".game-container");
-const result = document.getElementById("result");
 const controls = document.querySelector(".controls-container");
+const resultModal = document.getElementById("result-modal");
+const resultMessage = document.getElementById("result-message");
+const closeModalButton = document.querySelector(".close");
 let cards;
 let interval;
 let firstCard = false;
@@ -12,18 +14,18 @@ let secondCard = false;
 
 // Items array
 const items = [
-  { name: "amaryllis", image: "images/amaryllis.png" },
-  { name: "cactus", image: "images/cactus.png" },
-  { name: "chamomile", image: "images/chamomile.png" },
-  { name: "cherry-blossom", image: "images/cherry-blossom.png" },
-  { name: "coriander", image: "images/coriander.png" },
-  { name: "crocus", image: "images/crocus.png" },
-  { name: "daffodil", image: "images/daffodil.png" },
-  { name: "dahlia", image: "images/dahlia.png" },
-  { name: "dandelion", image: "images/dandelion.png" },
-  { name: "dianthus", image: "images/dianthus.png" },
-  { name: "rose", image: "images/rose.png" },
-  { name: "sunflower", image: "images/sunflower.png" },
+  { name: "amaryllis", image: "assets/images/amaryllis.png" },
+  { name: "cactus", image: "assets/images/cactus.png" },
+  { name: "chamomile", image: "assets/images/chamomile.png" },
+  { name: "cherry-blossom", image: "assets/images/cherry-blossom.png" },
+  { name: "coriander", image: "assets/images/coriander.png" },
+  { name: "crocus", image: "assets/images/crocus.png" },
+  { name: "daffodil", image: "assets/images/daffodil.png" },
+  { name: "dahlia", image: "assets/images/dahlia.png" },
+  { name: "dandelion", image: "assets/images/dandelion.png" },
+  { name: "dianthus", image: "assets/images/dianthus.png" },
+  { name: "rose", image: "assets/images/rose.png" },
+  { name: "sunflower", image: "assets/images/sunflower.png" },
 ];
 
 // Initial Time
@@ -69,13 +71,19 @@ const generateRandom = (size = 4) => {
   return cardValues;
 };
 
+// For displaying the "You Won" message in the modal
+const displayWinMessage = () => {
+  resultMessage.innerHTML = `<h2>You Won!</h2><h4>Moves: ${movesCount}</h4>`;
+  resultModal.style.display = "block";
+};
+
 const matrixGenerator = (cardValues, size = 4) => {
   gameContainer.innerHTML = "";
   cardValues = [...cardValues, ...cardValues];
   cardValues.sort(() => Math.random() - 0.5);
   for (let i = 0; i < size * size; i++) {
     /*
-      Create Cards
+      Create Cards:
       before => front side (contains question mark)
       after => back side (contains actual image);
       data-card-values is a custom attribute which stores the names of the cards to match later
@@ -115,9 +123,8 @@ const matrixGenerator = (cardValues, size = 4) => {
             firstCard = false;
             // winCount increment as user found a correct match
             winCount += 1;
-            if (winCount == Math.floor(cardValues.length / 2)) {
-              result.innerHTML = `<h2>You Won</h2>
-            <h4>Moves: ${movesCount}</h4>`;
+            if (winCount === Math.floor(cardValues.length / 2)) {
+              displayWinMessage();
               stopGame();
             }
           } else {
@@ -162,6 +169,18 @@ stopButton.addEventListener(
     clearInterval(interval);
   })
 );
+
+// Close modal when close button is clicked
+closeModalButton.addEventListener("click", () => {
+  resultModal.style.display = "none";
+});
+
+// Close modal when user clicks outside of it
+window.addEventListener("click", (event) => {
+  if (event.target === resultModal) {
+    resultModal.style.display = "none";
+  }
+});
 
 // Initialize values and func calls
 const initializer = () => {
