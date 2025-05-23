@@ -48,7 +48,7 @@ A simple and interactive web-based memory game built with HTML, CSS, and JavaScr
 Clone the project
 
 ```bash 
-git clone https://github.com/yourusername/memory-game.git
+git clone https://github.com/MphoItumeleng/memory-game.git
 ```
 
 Go to the project directory
